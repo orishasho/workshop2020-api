@@ -1,4 +1,4 @@
-const dbClient = require('../initializers/db').client;
+const dbClient = require('../initializers/db').getClient();
 const pgFormat = require('pg-format');
 
 /* CONTROLLER INTERFACE */
