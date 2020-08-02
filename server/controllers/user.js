@@ -31,7 +31,7 @@ module.exports = {
 
 async function insertToUsers(user_email, user_password) {
     try {
-        await client.query("insert into users (user_email, password) values ($1, $2)", [user_email, user_password]);
+        await dbClient.query("insert into users (user_email, password) values ($1, $2)", [user_email, user_password]);
         return true
     } catch (e) {
         return false;
@@ -40,7 +40,9 @@ async function insertToUsers(user_email, user_password) {
 
 async function readUsersDetails(user_email) {
     try {
-        const results = await client.query("select * from users where user_email = $1", [user_email]);
+        console.log("before...");
+        const results = await dbClient.query("select * from users where user_email = $1", [user_email]);
+        console.log("here they are:" + results);
         return results.rows;
     } catch (e) {
         return [];

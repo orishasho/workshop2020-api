@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const userCourseRoute = require('./server/routes/userCourse');
 const courseRoute = require('./server/routes/course');
-const courseRoute = require('./server/routes/user');
+const userRoute = require('./server/routes/user');
 const dbInitializer = require('./server/initializers/db');
 
 // App settings
