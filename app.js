@@ -3,6 +3,8 @@ const cors = require('cors');
 const userCourseRoute = require('./server/routes/userCourse');
 const courseRoute = require('./server/routes/course');
 const userRoute = require('./server/routes/user');
+const courseScheduleRoute = require('./server/routes/courseSchedule');
+const userScheduleDraftRoute = require('./server/routes/userScheduleDraft');
 const dbInitializer = require('./server/initializers/db');
 
 // App settings
@@ -14,6 +16,8 @@ app.use(cors());
 app.use('/user_course', userCourseRoute);
 app.use('/course', courseRoute);
 app.use('/user', userRoute);
+app.use('/course_schedule', courseScheduleRoute);
+app.use('/user_schedule_drafts', userScheduleDraftRoute);
 
 // App start
 app.listen(8080, () => console.log('Web server is listening.. on port 8080'));
