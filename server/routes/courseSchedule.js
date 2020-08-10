@@ -4,7 +4,7 @@ const courseScheduleController = require('../controllers/courseSchedule')
 
 router.get('/possible_courses', courseScheduleController.getPossibleCourses);
 
-router.get('/all', courseScheduleController.getCoursesSchedules);
+router.post('/all', courseScheduleController.getCoursesSchedules);
 
 
 module.exports = router;

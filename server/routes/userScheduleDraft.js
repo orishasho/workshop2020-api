@@ -5,5 +5,6 @@ const userScheduleDraftController = require('../controllers/userScheduleDraft')
 router.get('/allNames', userScheduleDraftController.getUserScheduleDraftNames);
 router.get('/byName', userScheduleDraftController.getUserScheduleDraftByName);
 router.post('/all', userScheduleDraftController.postUserScheduleDraft);
+router.put('/byName', userScheduleDraftController.updateUserScheduleDraftByName);
 
 module.exports = router;
