@@ -40,6 +40,20 @@ module.exports = {
         }
     },
 
+    async finalizeUserScheduleDraftByName(req, res) {
+        let result = {}
+        try {
+            const reqJson = req.body;
+            await finalizeUserScheduleDrafts(reqJson.user_id, reqJson.draft_name)
+            result.success = true;
+        } catch (e) {
+            result.success = false;
+        } finally {
+            res.setHeader("content-type", "application/json")
+            res.send(JSON.stringify(result))
+        }
+    },
+
     async postUserScheduleDraft(req, res) {
         let result = {}
         try {
@@ -61,7 +75,7 @@ module.exports = {
 
 async function readUserScheduleDraftNames(user_id) {
     try {
-        const results = await dbClient.query("select draft_name from user_schedule_drafts where user_id=$1", [user_id]);
+        const results = await dbClient.query("select draft_name, is_final from user_schedule_drafts where user_id=$1", [user_id]);
         return results.rows;
     } catch (e) {
         console.log(e);
@@ -92,6 +106,16 @@ async function updateUserScheduleDrafts(user_id, draft_name, draft) {
         await dbClient.query("update user_schedule_drafts set draft=$3 where user_id=$1 and draft_name=$2", [user_id, draft_name, JSON.stringify(draft)]);
         return true
     } catch (e) {
+        return false;
+    }
+}
+
+async function finalizeUserScheduleDrafts(user_id, draft_name) {
+    try {
+        await dbClient.query("update user_schedule_drafts set is_final=(case when draft_name = $2 then 1 else 0 end) where user_id=$1", [user_id, draft_name]);
+        return true
+    } catch (e) {
+        console.log(e);
         return false;
     }
 }

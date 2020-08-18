@@ -40,9 +40,7 @@ async function insertToUsers(user_email, user_password) {
 
 async function readUsersDetails(user_email) {
     try {
-        console.log("before...");
         const results = await dbClient.query("select * from users where user_email = $1", [user_email]);
-        console.log("here they are:" + results);
         return results.rows;
     } catch (e) {
         return [];
