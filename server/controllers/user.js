@@ -14,7 +14,7 @@ module.exports = {
         } catch (e) {
             result.success = false;
         } finally {
-            res.setHeader("content-type", "application/json")
+            res.setHeader("content-type", "application/json");
             res.send(JSON.stringify(result))
         }
     },
@@ -22,7 +22,15 @@ module.exports = {
     async handleGetUserDetails(req, res) {
         const user_email = req.query["user_email"];
         const rows = await readUsersDetails(user_email);
-        res.setHeader("content-type", "application/json")
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows))
+    },
+
+    async updateUserNameByEmail(req, res) {
+        const user_email = req.body["user_email"];
+        const name = req.body["name"];
+        const rows = await updateUserNameByEmailInDb(user_email, name);
+        res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(rows))
     }
 };
@@ -41,6 +49,15 @@ async function insertToUsers(user_email, user_password) {
 async function readUsersDetails(user_email) {
     try {
         const results = await dbClient.query("select * from users where user_email = $1", [user_email]);
+        return results.rows;
+    } catch (e) {
+        return [];
+    }
+}
+
+async function updateUserNameByEmailInDb(user_email, name) {
+    try {
+        const results = await dbClient.query("update users set name = $1 where user_email = $2", [name, user_email]);
         return results.rows;
     } catch (e) {
         return [];
