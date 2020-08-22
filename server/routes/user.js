@@ -6,4 +6,6 @@ router.post('/', userController.postUserDetails);
 
 router.get('/', userController.handleGetUserDetails);
 
+router.put('/updateUserNameByEmail', userController.updateUserNameByEmail)
+
 module.exports = router;
