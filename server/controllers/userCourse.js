@@ -43,6 +43,22 @@ module.exports = {
         res.send(JSON.stringify(rows));
     },
 
+    async handleGetGrade(req, res) {
+        const userId = req.query['user_id'];
+        const course_number = req.query['course_number'];
+        const rows = await getCourseGrade(userId, course_number);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows));
+    },
+
+    async handleGetCourseStatus(req, res) {
+        const userId = req.query['user_id'];
+        const course_number = req.query['course_number'];
+        const rows = await getCourseStatus(userId, course_number);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows));
+    },
+
     async handleGetTopPopular(req, res) {
         const rows = await getTopPopular();
         res.setHeader("content-type", "application/json");
@@ -82,9 +98,27 @@ async function getUserCoursesByUserId(userId) {
     }
 }
 
+async function getCourseGrade(userId, course_number) {
+    try {
+        const results = await dbClient.query('select course_grade from user_courses where user_id = $1 and course_number = $2', [userId, course_number]);
+        return results.rows;
+    } catch (e) {
+        return [];
+    }
+}
+
+async function getCourseStatus(userId, course_number) {
+    try {
+        const results = await dbClient.query('select * from sp__get_course_status($1,$2)', [userId, course_number]);
+        return results.rows;
+    } catch (e) {
+        return [];
+    }
+}
+
 async function getTopPopular() {
     try {
-        const query = 'with top_3 as (select course_number, count(*) cnt from user_courses where course_number in (select course_number from courses where course_type in (\'math\', \'elective\')) group by 1 order by 2 desc limit 3) select c.course_name from courses c join top_3 t on c.course_number = t.course_number order by cnt desc';
+        const query = 'with top_3 as (select course_number, count(*) cnt from user_courses where course_number in (select course_number from courses where course_type in (\'math\', \'elective\')) group by 1 order by 2 desc limit 3) select c.course_name, t.cnt from courses c join top_3 t on c.course_number = t.course_number order by cnt desc';
         const results = await dbClient.query(query);
         return results.rows;
     } catch (e) {

@@ -45,7 +45,7 @@ async function insertToUserRatings(user_id, course_number, interesting_rating, h
 
 async function getTopInteresting() {
     try {
-        const query = 'WITH top_3 AS (SELECT course_number, avg(interesting_rating) average FROM user_ratings GROUP BY 1 ORDER BY 2 DESC LIMIT 3) SELECT c.course_name FROM courses c JOIN top_3 t ON c.course_number = t.course_number ORDER BY average DESC';
+        const query = 'WITH top_3 AS (SELECT course_number, avg(interesting_rating) average FROM user_ratings GROUP BY 1 ORDER BY 2 DESC LIMIT 3) SELECT c.course_name, round(t.average,1) as cnt FROM courses c JOIN top_3 t ON c.course_number = t.course_number ORDER BY average DESC';
         const results = await dbClient.query(query);
         return results.rows;
     } catch (e) {
@@ -56,7 +56,7 @@ async function getTopInteresting() {
 
 async function getTopHard() {
     try {
-        const query = 'WITH top_3 AS (SELECT course_number, avg(hard_rating) average FROM user_ratings GROUP BY 1 ORDER BY 2 DESC LIMIT 3) SELECT c.course_name FROM courses c JOIN top_3 t ON c.course_number = t.course_number ORDER BY average DESC';
+        const query = 'WITH top_3 AS (SELECT course_number, avg(hard_rating) average FROM user_ratings GROUP BY 1 ORDER BY 2 DESC LIMIT 3) SELECT c.course_name, round(t.average,1) as cnt FROM courses c JOIN top_3 t ON c.course_number = t.course_number ORDER BY average DESC';
         const results = await dbClient.query(query);
         return results.rows;
     } catch (e) {
