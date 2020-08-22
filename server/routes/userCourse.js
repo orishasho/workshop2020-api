@@ -8,6 +8,10 @@ router.get('/', userCourseController.handleGetUserCourses);
 
 router.get('/detailed', userCourseController.handleGetUserCoursesDetailed);
 
-router.get('/topPopular', userCourseController.handleGetTopPopular)
+router.get('/topPopular', userCourseController.handleGetTopPopular);
+
+router.get('/grade', userCourseController.handleGetGrade);
+
+router.get('/status', userCourseController.handleGetCourseStatus);
 
 module.exports = router;
