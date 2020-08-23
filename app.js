@@ -7,6 +7,7 @@ const courseScheduleRoute = require('./server/routes/courseSchedule');
 const userScheduleDraftRoute = require('./server/routes/userScheduleDraft');
 const userRatingRoute = require('./server/routes/userRating');
 const userFriendRoute = require('./server/routes/userFriend');
+const managementCollegeRoute = require('./server/routes/managementCollege');
 const dbInitializer = require('./server/initializers/db');
 
 // App settings
@@ -22,6 +23,8 @@ app.use('/course_schedule', courseScheduleRoute);
 app.use('/user_schedule_drafts', userScheduleDraftRoute);
 app.use('/user_rating', userRatingRoute);
 app.use('/user_friend', userFriendRoute);
+app.use('/management_college', managementCollegeRoute);
+
 
 // App start
 app.listen(8080, () => console.log('Web server is listening.. on port 8080'));
