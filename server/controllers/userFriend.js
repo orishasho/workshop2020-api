@@ -68,7 +68,7 @@ async function getFriendsWithDrafts(user_id) {
 
 async function getFriendRequestsByUser(user_id) {
     try {
-        const results = await dbClient.query("select sender from friend_requests where receiver = $1 and status is null", [user_id]);
+        const results = await dbClient.query("select * from sp__get_friend_requests_info($1)", [user_id]);
         return results.rows;
     } catch (e) {
         console.log(e);
@@ -78,7 +78,7 @@ async function getFriendRequestsByUser(user_id) {
 
 async function getFriendRequestsByUserCount(user_id) {
     try {
-        const results = await dbClient.query("select count(*) from friend_requests where receiver = $1 and seen = 0", [user_id]);
+        const results = await dbClient.query("select count(*) from friend_requests where receiver = $1 and status is null", [user_id]);
         return results.rows;
     } catch (e) {
         console.log(e);
@@ -97,11 +97,26 @@ async function insertToFriendRequests(sender, receiver) {
 }
 
 async function setFriendRequest(sender, receiver, status) {
-    try {
-        await dbClient.query("update friend_requests set status = $3, seen = 1 where sender = $1 and receiver = $2", [sender, receiver, status]);
-        return true
-    } catch (e) {
-        console.log(e);
-        return false;
+    if (status === "accepted") {
+        const addToFriendsQuery1 = `update user_friendships set user_friends = array_append(user_friends, ${receiver}) where user_id = ${sender};`;
+        const addToFriendsQuery2 = `update user_friendships set user_friends = array_append(user_friends, ${sender}) where user_id = ${receiver};`;
+        const updateRequestQuery = `update friend_requests set status = 'accepted', seen = 1 where sender = ${sender} and receiver = ${receiver};`;
+        try {
+            await dbClient.query('BEGIN');
+            await dbClient.query(addToFriendsQuery1 + addToFriendsQuery2 + updateRequestQuery);
+            await dbClient.query('COMMIT');
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    } else {
+        try {
+            await dbClient.query("update friend_requests set status = 'rejected', seen = 1 where sender = $1 and receiver = $2", [sender, receiver, status]);
+            return true
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
     }
 }
