@@ -32,6 +32,14 @@ module.exports = {
         const rows = await updateUserNameByEmailInDb(user_email, name);
         res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(rows))
+    },
+
+    async updateImgByUserId(req, res) {
+        const user_id = req.body["user_id"];
+        const img = req.body["img"];
+        const rows = await updateImgByUserIdInDb(user_id, img);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows))
     }
 };
 
@@ -42,6 +50,7 @@ async function insertToUsers(user_email, user_password) {
         await dbClient.query("insert into users (user_email, password) values ($1, $2)", [user_email, user_password]);
         return true
     } catch (e) {
+        console.log(e);
         return false;
     }
 }
@@ -51,6 +60,7 @@ async function readUsersDetails(user_email) {
         const results = await dbClient.query("select * from users where user_email = $1", [user_email]);
         return results.rows;
     } catch (e) {
+        console.log(e);
         return [];
     }
 }
@@ -60,6 +70,17 @@ async function updateUserNameByEmailInDb(user_email, name) {
         const results = await dbClient.query("update users set name = $1 where user_email = $2", [name, user_email]);
         return results.rows;
     } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
+
+async function updateImgByUserIdInDb(user_id, img) {
+    try {
+        const results = await dbClient.query("update users set img = $2 where user_id = $1", [user_id, img]);
+        return results.rows;
+    } catch (e) {
+        console.log(e);
         return [];
     }
 }
