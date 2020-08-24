@@ -7,9 +7,7 @@ module.exports = {
             const reqJson = req.body;
             console.log(reqJson);
             console.log(reqJson.user_email + "  " + reqJson.user_password);
-            await insertToUsers(reqJson.user_email, reqJson.user_password)
-                //console.log("in post");
-                //await insertToUsersCourses(reqJson);
+            await insertToUsers(reqJson.user_email, reqJson.user_password);
             result.success = true;
         } catch (e) {
             result.success = false;
