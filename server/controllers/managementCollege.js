@@ -59,7 +59,7 @@ async function getSpecificTypeCoursesFromDb(courseType) {
     try {
         const results = await dbClient.query('select * from courses where course_type = $1', [courseType]);
         return results.rows;
-    } catch(e) {
+    } catch (e) {
         return [];
     }
 }
@@ -72,8 +72,8 @@ async function bulkInsertToUserCourses(userCoursesArray) {
         userCourse.courseNumber
     ]);
 
-    const deletePreviousQuery = `delete from user_courses where user_id = ${formattedUserCoursesArray[0][0]};`;
-    const insertQuery = pgFormat('insert into user_courses (user_id, course_grade, course_status, course_number) VALUES %L', formattedUserCoursesArray);
+    const deletePreviousQuery = `delete from user_courses_minhal where user_id = ${formattedUserCoursesArray[0][0]};`;
+    const insertQuery = pgFormat('insert into user_courses_minhal (user_id, course_grade, course_status, course_number) VALUES %L', formattedUserCoursesArray);
     // Perform delete and insert in the same transaction:
     try {
         await dbClient.query('BEGIN');
@@ -87,7 +87,7 @@ async function bulkInsertToUserCourses(userCoursesArray) {
 
 async function getUserCoursesDetailedByUserId(userId) {
     try {
-        const results = await dbClient.query('select * from user_courses join courses on (user_courses.course_number = courses.course_number) where user_id = $1', [userId]);
+        const results = await dbClient.query('select * from user_courses_minhal join courses_minhal on (user_courses_minhal.course_number = courses_minhal.course_number) where user_id = $1', [userId]);
         return results.rows;
     } catch (e) {
         return [];
