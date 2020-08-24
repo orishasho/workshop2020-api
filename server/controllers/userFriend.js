@@ -24,6 +24,14 @@ module.exports = {
         res.send(JSON.stringify(rows));
     },
 
+    async handleGetFriendStatusByUser(req, res) {
+        const user_id = req.query["user_id"];
+        const friend_to_add = req.query["friend_to_add"];
+        const rows = await getFriendStatusByUser(user_id, friend_to_add);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows));
+    },
+
     async handleSendFriendRequest(req, res) {
         let result = {}
         try {
@@ -69,6 +77,16 @@ async function getFriendsWithDrafts(user_id) {
 async function getFriendRequestsByUser(user_id) {
     try {
         const results = await dbClient.query("select * from sp__get_friend_requests_info($1)", [user_id]);
+        return results.rows;
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
+
+async function getFriendStatusByUser(user_id, friend_to_add) {
+    try {
+        const results = await dbClient.query("select * from sp__check_friend_to_add($1, $2)", [user_id, friend_to_add]);
         return results.rows;
     } catch (e) {
         console.log(e);
