@@ -1,4 +1,5 @@
 const dbClient = require('../initializers/db').getClient();
+const pgFormat = require('pg-format');
 
 /* CONTROLLER INTERFACE */
 
@@ -19,6 +20,7 @@ module.exports = {
             await bulkInsertToUserCourses(userCoursesArray);
             result.success = true;
         } catch (e) {
+            console.log(e)
             result.success = false;
         } finally {
             res.setHeader("content-type", "application/json");
@@ -49,6 +51,12 @@ module.exports = {
         const rows = await getSpecificTypeCoursesFromDb('workshop');
         res.setHeader("content-type", "application/json");
         res.send(JSON.stringify(rows));
+    },
+
+    async getSeminarionCourses(req, res) {
+        const rows = await getSpecificTypeCoursesFromDb('seminarion');
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows));
     }
 };
 
@@ -57,7 +65,7 @@ module.exports = {
 
 async function getSpecificTypeCoursesFromDb(courseType) {
     try {
-        const results = await dbClient.query('select * from courses where course_type = $1', [courseType]);
+        const results = await dbClient.query('select * from courses_minhal where course_type = $1', [courseType]);
         return results.rows;
     } catch (e) {
         return [];
