@@ -8,4 +8,6 @@ router.get('/', userController.handleGetUserDetails);
 
 router.put('/updateUserNameByEmail', userController.updateUserNameByEmail)
 
+router.put('/updateImgByUserId', userController.updateImgByUserId)
+
 module.exports = router;

@@ -5,6 +5,7 @@ const userFriendController = require('../controllers/userFriend')
 router.get('/friendsByUser', userFriendController.handleGetFriendsByUser);
 router.get('/friendRequestsByUser', userFriendController.handleGetFriendRequestsByUser);
 router.get('/friendRequestsByUserCount', userFriendController.handleGetFriendRequestsByUserCount);
+router.get('/friendStatusByUser', userFriendController.handleGetFriendStatusByUser);
 router.post('/sendFriendRequest', userFriendController.handleSendFriendRequest);
 router.put('/setReceivedFriendRequest', userFriendController.handleSetFriendRequest);
 
