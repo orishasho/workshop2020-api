@@ -59,6 +59,13 @@ module.exports = {
         res.send(JSON.stringify(rows));
     },
 
+    async handleGetCourseStatusAndGrade(req, res) {
+        const userId = req.query['user_id'];
+        const rows = await getCourseStatusAndGrade(userId);
+        res.setHeader("content-type", "application/json");
+        res.send(JSON.stringify(rows));
+    },
+
     async handleGetTopPopular(req, res) {
         const rows = await getTopPopular();
         res.setHeader("content-type", "application/json");
@@ -110,6 +117,15 @@ async function getCourseGrade(userId, course_number) {
 async function getCourseStatus(userId, course_number) {
     try {
         const results = await dbClient.query('select * from sp__get_course_status($1,$2)', [userId, course_number]);
+        return results.rows;
+    } catch (e) {
+        return [];
+    }
+}
+
+async function getCourseStatusAndGrade(userId) {
+    try {
+        const results = await dbClient.query('select * from sp__get_courses_status_and_grade($1)', [userId]);
         return results.rows;
     } catch (e) {
         return [];

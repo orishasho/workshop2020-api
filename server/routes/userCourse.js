@@ -14,4 +14,6 @@ router.get('/grade', userCourseController.handleGetGrade);
 
 router.get('/status', userCourseController.handleGetCourseStatus);
 
+router.get('/statusAndGrade', userCourseController.handleGetCourseStatusAndGrade);
+
 module.exports = router;
