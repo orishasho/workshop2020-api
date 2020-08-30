@@ -14,9 +14,7 @@ module.exports = {
     async getCoursesSchedules(req, res) {
         const courses = req.body["arr"];
         const semester = req.body["semester"];
-        console.log(courses);
         const rows = await readcoursesSchedules(courses, semester);
-        console.log(rows);
         res.setHeader("content-type", "application/json")
         res.send(JSON.stringify(rows))
     }

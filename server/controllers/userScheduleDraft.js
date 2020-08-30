@@ -21,7 +21,6 @@ module.exports = {
         const user_id = req.query["user_id"];
         const draft_name = req.query["draft_name"];
         const rows = await readUserScheduleDraftByName(user_id, draft_name);
-        console.log(rows);
         res.setHeader("content-type", "application/json")
         res.send(JSON.stringify(rows))
     },

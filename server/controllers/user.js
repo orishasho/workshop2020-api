@@ -70,7 +70,6 @@ async function readUsersDetails(user_email) {
 
 async function readUserCollege(user_id) {
     try {
-        console.log(user_id);
         const results = await dbClient.query("select college from users where user_id = $1", [user_id]);
         return results.rows;
     } catch (e) {

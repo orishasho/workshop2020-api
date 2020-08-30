@@ -12,6 +12,7 @@ const dbInitializer = require('./server/initializers/db');
 
 // App settings
 const app = express();
+const port = process.env.PORT || 8080;
 app.use(express.json());
 app.use(cors());
 
@@ -27,5 +28,5 @@ app.use('/management_college', managementCollegeRoute);
 
 
 // App start
-app.listen(8080, () => console.log('Web server is listening.. on port 8080'));
+app.listen(port, () => console.log(`Web server is listening.. on port ${port}`));
 dbInitializer.initConnection().then(() => console.log('connected to db'));
