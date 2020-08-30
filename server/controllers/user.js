@@ -6,8 +6,6 @@ module.exports = {
         try {
             const reqJson = req.body;
             await insertToUsers(reqJson.user_email, reqJson.user_password, reqJson.college)
-                //console.log("in post");
-                //await insertToUsersCourses(reqJson);
             result.success = true;
         } catch (e) {
             result.success = false;
